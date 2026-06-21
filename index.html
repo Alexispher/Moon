@@ -3,92 +3,87 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#000000" />
-  <title>Isomium Moon Render Engine</title>
+  <title>ISOMIUM Moon Realistic</title>
   <link rel="stylesheet" href="style.css" />
 
   <script type="importmap">
     {
       "imports": {
         "three": "https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js",
-        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/",
-        "lil-gui": "https://cdn.jsdelivr.net/npm/lil-gui@0.19/+esm"
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/"
       }
     }
   </script>
 </head>
-
 <body>
   <main id="app">
-    <canvas id="space-canvas" aria-label="Render 3D da Lua"></canvas>
-    <div id="film-layer" aria-hidden="true"></div>
-    <div id="flash" aria-hidden="true"></div>
+    <canvas id="space-canvas" aria-label="Renderização 3D realista da Lua"></canvas>
+    <div id="flash"></div>
+    <div id="film-overlay"></div>
 
-    <div id="phone-preview" data-label="iPhone 17 Pro Max • 1320 × 2868" aria-hidden="true">
+    <div id="phone-preview" data-label="iPhone 17 Pro Max • 1320 × 2868">
       <div class="dynamic-island"></div>
     </div>
 
-    <section id="hud" class="glass-panel" aria-label="Controles principais">
+    <section id="hud" class="glass-panel">
       <div class="hud-header">
         <div>
           <h1>ISOMIUM</h1>
-          <p>Moon Render Engine</p>
+          <p>Moon Realistic Engine • v3</p>
         </div>
-
-        <div class="hud-actions">
-          <button id="btn-open-config" type="button" title="Abrir configurações em JSON">JSON</button>
-          <button id="btn-toggle-ui" type="button" title="Ocultar interface">UI</button>
-        </div>
+        <button id="btn-toggle-ui" title="Ocultar interface">UI</button>
       </div>
 
       <div class="hud-grid">
-        <button id="btn-export-4k" type="button">Exportar 4K</button>
-        <button id="btn-export-vertical" type="button">4K Vertical</button>
-        <button id="btn-export-square" type="button">4096²</button>
-        <button id="btn-export-iphone" type="button">iPhone 17 PM</button>
-        <button id="btn-export-free" type="button">Livre</button>
-        <button id="btn-reset" type="button">Reset</button>
+        <button id="btn-export-4k">Exportar 4K</button>
+        <button id="btn-export-vertical">4K Vertical</button>
+        <button id="btn-export-square">4096²</button>
+        <button id="btn-export-iphone">iPhone 17 PM</button>
+        <button id="btn-export-free">Livre</button>
+        <button id="btn-json">JSON</button>
       </div>
 
       <div class="hud-info">
         <span>Mouse: orbitar</span>
         <span>Scroll: zoom</span>
         <span>H: ocultar UI</span>
-        <span>J: painel JSON</span>
-        <span>P: capturar</span>
-        <span>Sem textura externa</span>
+        <span>P: capturar 4K</span>
       </div>
     </section>
 
-    <section id="json-panel" class="glass-panel" aria-label="Configuração JSON">
-      <div class="json-header">
+    <aside id="json-panel" class="glass-panel open" aria-label="Painel de configurações JSON">
+      <div class="json-head">
         <div>
-          <h2>Configuração JSON</h2>
-          <p>Edite, cole ou importe configurações. Ao aplicar, a Lua muda imediatamente.</p>
+          <strong>Configurações JSON</strong>
+          <small>Cole um JSON completo ou parcial e clique em Aplicar.</small>
         </div>
-        <button id="btn-close-config" type="button" title="Fechar painel">×</button>
+        <button id="btn-close-json" title="Fechar painel">×</button>
       </div>
 
-      <textarea id="config-json" spellcheck="false" aria-label="Editor JSON de configurações"></textarea>
+      <textarea id="json-input" spellcheck="false"></textarea>
 
-      <div class="json-grid">
-        <button id="btn-json-apply" type="button">Aplicar JSON</button>
-        <button id="btn-json-export" type="button">Atualizar do site</button>
-        <button id="btn-json-copy" type="button">Copiar</button>
-        <button id="btn-json-download" type="button">Baixar .json</button>
+      <div class="json-actions">
+        <button id="btn-apply-json">Aplicar JSON</button>
+        <button id="btn-export-json">Gerar JSON atual</button>
+        <button id="btn-copy-json">Copiar</button>
+        <button id="btn-download-json">Baixar .json</button>
+        <label class="file-button">
+          Importar .json
+          <input id="json-file" type="file" accept="application/json,.json" />
+        </label>
       </div>
 
-      <label class="file-label" for="config-file">
-        Importar arquivo JSON
-        <input id="config-file" type="file" accept="application/json,.json" />
-      </label>
+      <div class="preset-actions">
+        <button data-preset="realista">Realista</button>
+        <button data-preset="cinematico">Cinemático</button>
+        <button data-preset="apollo">Apollo P&B</button>
+        <button data-preset="iphone">iPhone</button>
+      </div>
 
-      <p id="json-status" class="json-status">Pronto.</p>
-    </section>
+      <p id="json-status">Pronto.</p>
+    </aside>
 
-    <section id="capture-status" class="capture-status">
-      Renderizando captura...
-    </section>
+    <section id="capture-status" class="capture-status">Renderizando captura...</section>
   </main>
 
   <script type="module" src="script.js"></script>
