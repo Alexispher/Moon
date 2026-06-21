@@ -1,0 +1,17 @@
+{
+  "engine": "ISOMIUM Moon Render Engine",
+  "version": "2.0.0",
+  "params": {
+    "sceneProfile": "Wallpaper Isomium",
+    "seed": 88213,
+    "phaseAngle": 102,
+    "offsetX": -4.7,
+    "subjectScale": 1.64,
+    "cameraMono": true,
+    "showEarth": false,
+    "showSatellites": false,
+    "showStars": false,
+    "freeWidth": 4096,
+    "freeHeight": 4096
+  }
+}

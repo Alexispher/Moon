@@ -1,0 +1,21 @@
+{
+  "engine": "ISOMIUM Moon Render Engine",
+  "version": "2.0.0",
+  "params": {
+    "sceneProfile": "Terra e Sol vistos da Lua",
+    "sceneMode": "Superfície Lunar",
+    "showEarth": true,
+    "sunVisible": true,
+    "showSatellites": true,
+    "earthScale": 1.35,
+    "earthAzimuth": -22,
+    "earthElevation": 26,
+    "sunAzimuth": 24,
+    "sunElevation": 21,
+    "phaseAngle": 30,
+    "seed": 40477,
+    "craterCount": 1200,
+    "bumpScale": 0.04,
+    "cameraMono": false
+  }
+}

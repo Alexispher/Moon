@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Isomium Moon 4K</title>
+  <meta name="theme-color" content="#000000" />
+  <title>Isomium Moon Render Engine</title>
   <link rel="stylesheet" href="style.css" />
 
   <script type="importmap">
@@ -19,22 +20,25 @@
 
 <body>
   <main id="app">
-    <canvas id="space-canvas"></canvas>
+    <canvas id="space-canvas" aria-label="Render 3D da Lua"></canvas>
     <div id="film-layer" aria-hidden="true"></div>
     <div id="flash" aria-hidden="true"></div>
 
-    <div id="phone-preview" data-label="iPhone 17 Pro Max • 1320 × 2868">
+    <div id="phone-preview" data-label="iPhone 17 Pro Max • 1320 × 2868" aria-hidden="true">
       <div class="dynamic-island"></div>
     </div>
 
-    <section id="hud" class="glass-panel">
+    <section id="hud" class="glass-panel" aria-label="Controles principais">
       <div class="hud-header">
         <div>
           <h1>ISOMIUM</h1>
           <p>Moon Render Engine</p>
         </div>
 
-        <button id="btn-toggle-ui" type="button" title="Ocultar interface">UI</button>
+        <div class="hud-actions">
+          <button id="btn-open-config" type="button" title="Abrir configurações em JSON">JSON</button>
+          <button id="btn-toggle-ui" type="button" title="Ocultar interface">UI</button>
+        </div>
       </div>
 
       <div class="hud-grid">
@@ -50,8 +54,36 @@
         <span>Mouse: orbitar</span>
         <span>Scroll: zoom</span>
         <span>H: ocultar UI</span>
+        <span>J: painel JSON</span>
         <span>P: capturar</span>
+        <span>Sem textura externa</span>
       </div>
+    </section>
+
+    <section id="json-panel" class="glass-panel" aria-label="Configuração JSON">
+      <div class="json-header">
+        <div>
+          <h2>Configuração JSON</h2>
+          <p>Edite, cole ou importe configurações. Ao aplicar, a Lua muda imediatamente.</p>
+        </div>
+        <button id="btn-close-config" type="button" title="Fechar painel">×</button>
+      </div>
+
+      <textarea id="config-json" spellcheck="false" aria-label="Editor JSON de configurações"></textarea>
+
+      <div class="json-grid">
+        <button id="btn-json-apply" type="button">Aplicar JSON</button>
+        <button id="btn-json-export" type="button">Atualizar do site</button>
+        <button id="btn-json-copy" type="button">Copiar</button>
+        <button id="btn-json-download" type="button">Baixar .json</button>
+      </div>
+
+      <label class="file-label" for="config-file">
+        Importar arquivo JSON
+        <input id="config-file" type="file" accept="application/json,.json" />
+      </label>
+
+      <p id="json-status" class="json-status">Pronto.</p>
     </section>
 
     <section id="capture-status" class="capture-status">
