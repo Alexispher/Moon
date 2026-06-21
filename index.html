@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ISOMIUM Moon Realistic v4</title>
+  <title>ISOMIUM Moon Realistic v5</title>
   <link rel="stylesheet" href="style.css" />
-
   <script type="importmap">
     {
       "imports": {
@@ -15,20 +14,21 @@
     }
   </script>
 </head>
-
 <body>
   <main id="app">
     <canvas id="space-canvas"></canvas>
-
     <div id="flash"></div>
 
     <section id="hud" class="glass-panel">
       <div class="hud-header">
         <div>
           <h1>ISOMIUM</h1>
-          <p>Moon Realistic Engine v4</p>
+          <p>Moon Realistic Engine v5</p>
         </div>
-        <button id="btn-toggle-json" title="Abrir painel JSON">JSON</button>
+        <div class="hud-actions-mini">
+          <button id="btn-toggle-controls" title="Abrir controles">CTRL</button>
+          <button id="btn-toggle-json" title="Abrir JSON">JSON</button>
+        </div>
       </div>
 
       <div class="hud-grid">
@@ -44,12 +44,24 @@
         <span>Mouse: orbitar</span>
         <span>Scroll: zoom</span>
         <span>H: ocultar UI</span>
+        <span>C: controles</span>
         <span>J: JSON</span>
       </div>
     </section>
 
+    <section id="controls-panel" class="glass-panel">
+      <div class="panel-header">
+        <div>
+          <h2>Controles da Lua</h2>
+          <p>Ajuste e veja o resultado em tempo real.</p>
+        </div>
+        <button id="btn-close-controls">×</button>
+      </div>
+      <div id="controls-content"></div>
+    </section>
+
     <section id="json-panel" class="glass-panel">
-      <div class="json-header">
+      <div class="panel-header">
         <div>
           <h2>Configurações JSON</h2>
           <p>Cole um JSON completo ou parcial e clique em aplicar.</p>
