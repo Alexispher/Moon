@@ -1,7 +1,64 @@
-<div class="hud-header">
-  <div>
-    <h1>ISOMIUM</h1>
-    <p>Lunar Render Engine</p>
-  </div>
-  <button id="btn-toggle-ui" title="Ocultar interface">UI</button>
-</div>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Isomium Moon 4K</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/",
+        "lil-gui": "https://cdn.jsdelivr.net/npm/lil-gui@0.19/+esm"
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <main id="app">
+    <canvas id="space-canvas"></canvas>
+    <div id="film-layer" aria-hidden="true"></div>
+    <div id="flash" aria-hidden="true"></div>
+
+    <div id="phone-preview" data-label="iPhone 17 Pro Max • 1320 × 2868">
+      <div class="dynamic-island"></div>
+    </div>
+
+    <section id="hud" class="glass-panel">
+      <div class="hud-header">
+        <div>
+          <h1>ISOMIUM</h1>
+          <p>Moon Render Engine</p>
+        </div>
+
+        <button id="btn-toggle-ui" type="button" title="Ocultar interface">UI</button>
+      </div>
+
+      <div class="hud-grid">
+        <button id="btn-export-4k" type="button">Exportar 4K</button>
+        <button id="btn-export-vertical" type="button">4K Vertical</button>
+        <button id="btn-export-square" type="button">4096²</button>
+        <button id="btn-export-iphone" type="button">iPhone 17 PM</button>
+        <button id="btn-export-free" type="button">Livre</button>
+        <button id="btn-reset" type="button">Reset</button>
+      </div>
+
+      <div class="hud-info">
+        <span>Mouse: orbitar</span>
+        <span>Scroll: zoom</span>
+        <span>H: ocultar UI</span>
+        <span>P: capturar</span>
+      </div>
+    </section>
+
+    <section id="capture-status" class="capture-status">
+      Renderizando captura...
+    </section>
+  </main>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
