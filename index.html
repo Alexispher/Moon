@@ -3,8 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ISOMIUM Moon Realistic v5</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Lua Cinematográfica - Wallpaper Print</title>
+  <style>
+    body { 
+      margin: 0; 
+      overflow: hidden; 
+      background-color: #000; 
+    }
+    canvas { 
+      width: 100vw; 
+      height: 100vh; 
+      display: block; 
+    }
+  </style>
+
+  <!-- Usando a versão moderna do Three.js (a mesma do seu motor ISOMIUM) -->
   <script type="importmap">
     {
       "imports": {
@@ -15,83 +28,119 @@
   </script>
 </head>
 <body>
-  <main id="app">
-    <canvas id="space-canvas"></canvas>
-    <div id="flash"></div>
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-    <section id="hud" class="glass-panel">
-      <div class="hud-header">
-        <div>
-          <h1>ISOMIUM</h1>
-          <p>Moon Realistic Engine v5</p>
-        </div>
-        <div class="hud-actions-mini">
-          <button id="btn-toggle-controls" title="Abrir controles">CTRL</button>
-          <button id="btn-toggle-json" title="Abrir JSON">JSON</button>
-        </div>
-      </div>
+    // 1. Texturas (Em alta qualidade)
+    const textureURL = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/17271/lroc_color_poles_1k.jpg"; 
+    const displacementURL = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/17271/ldem_3_8bit.jpg"; 
+    const worldURL = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/17271/hipp8_s.jpg";
 
-      <div class="hud-grid">
-        <button id="btn-preset-real">Realista</button>
-        <button id="btn-preset-crescent">Crescente</button>
-        <button id="btn-preset-wallpaper">Wallpaper</button>
-        <button id="btn-reset-camera">Câmera</button>
-        <button id="btn-export-4k">Exportar 4K</button>
-        <button id="btn-export-square">4096²</button>
-      </div>
+    // 2. Configuração Básica de Cena e Câmera
+    const scene = new THREE.Scene();
+    
+    // Campo de visão (FOV) reduzido para 45 dá um aspecto mais profissional de lente fotográfica
+    const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
+    camera.position.z = 5.2;
 
-      <div class="hud-info">
-        <span>Mouse: orbitar</span>
-        <span>Scroll: zoom</span>
-        <span>H: ocultar UI</span>
-        <span>C: controles</span>
-        <span>J: JSON</span>
-      </div>
-    </section>
+    // 3. Renderizador Cinematográfico (O segredo do visual realista)
+    const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setPixelRatio( Math.min(window.devicePixelRatio, 2) );
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping; // Tratamento de cor de cinema
+    renderer.toneMappingExposure = 1.15; // Exposição perfeitamente calibrada
+    document.body.appendChild( renderer.domElement );
 
-    <section id="controls-panel" class="glass-panel">
-      <div class="panel-header">
-        <div>
-          <h2>Controles da Lua</h2>
-          <p>Ajuste e veja o resultado em tempo real.</p>
-        </div>
-        <button id="btn-close-controls">×</button>
-      </div>
-      <div id="controls-content"></div>
-    </section>
+    // 4. Controles de Câmera Suaves (Inércia ao soltar o mouse)
+    const controls = new OrbitControls( camera, renderer.domElement );
+    controls.enablePan = false;
+    controls.enableDamping = true; 
+    controls.dampingFactor = 0.05;
+    controls.minDistance = 3.0; // Não deixa dar zoom atravessando a Lua
+    controls.maxDistance = 10.0; // Não deixa a Lua sumir na tela
 
-    <section id="json-panel" class="glass-panel">
-      <div class="panel-header">
-        <div>
-          <h2>Configurações JSON</h2>
-          <p>Cole um JSON completo ou parcial e clique em aplicar.</p>
-        </div>
-        <button id="btn-close-json">×</button>
-      </div>
+    // 5. Geometria e Texturas da Lua
+    const geometry = new THREE.SphereGeometry( 2, 256, 256 ); // Malha super densa para as crateras
 
-      <textarea id="json-input" spellcheck="false"></textarea>
+    const textureLoader = new THREE.TextureLoader();
+    
+    const albedo = textureLoader.load( textureURL );
+    albedo.colorSpace = THREE.SRGBColorSpace;
+    albedo.anisotropy = renderer.capabilities.getMaxAnisotropy();
 
-      <div class="json-actions">
-        <button id="btn-apply-json">Aplicar JSON</button>
-        <button id="btn-export-json">Atualizar texto</button>
-        <button id="btn-copy-json">Copiar</button>
-        <button id="btn-download-json">Baixar JSON</button>
-      </div>
+    const displacementMap = textureLoader.load( displacementURL );
+    
+    const worldTexture = textureLoader.load( worldURL );
+    worldTexture.colorSpace = THREE.SRGBColorSpace;
 
-      <div class="json-actions second-row">
-        <label class="file-label">
-          Importar arquivo
-          <input id="json-file" type="file" accept="application/json,.json" />
-        </label>
-        <button id="btn-capture-free">Captura livre</button>
-      </div>
+    // 6. Material PBR (Reação à luz baseada em física - Regolito Fosco)
+    const material = new THREE.MeshStandardMaterial({ 
+      color: 0xffffff,
+      map: albedo,
+      displacementMap: displacementMap,
+      displacementScale: 0.05, // As montanhas e crateras formam sombra na silhueta
+      bumpMap: displacementMap,
+      bumpScale: 0.015,         
+      roughness: 0.98,         // Evita que a lua pareça uma bola de plástico úmida
+      metalness: 0.0
+    });
 
-      <p id="json-status"></p>
-    </section>
+    const moon = new THREE.Mesh( geometry, material );
+    scene.add( moon );
 
-    <section id="capture-status">Renderizando captura...</section>
-  </main>
+    // 7. Iluminação Dramática e Atmosférica
+    // Luz principal pesada, criando a linha do Terminator (onde as sombras ficam longas e bonitas)
+    const sunLight = new THREE.DirectionalLight(0xFFFFFF, 4.0); 
+    sunLight.position.set(-90, 12, -15); 
+    scene.add(sunLight);
 
-  <script type="module" src="script.js"></script>
+    // Earthshine: A Terra reflete um tiquinho de luz na parte escura, para não ficar 100% preta
+    const earthShine = new THREE.AmbientLight(0xffffff, 0.012); 
+    scene.add(earthShine);
+
+    // 8. Fundo Espacial Discreto
+    const worldGeometry = new THREE.SphereGeometry( 500, 64, 64 );
+    const worldMaterial = new THREE.MeshBasicMaterial({ 
+      color: 0x444444, // Fundo escurecido intencionalmente para não competir com a Lua
+      map: worldTexture, 
+      side: THREE.BackSide
+    });
+    const world = new THREE.Mesh( worldGeometry, worldMaterial );
+    scene.add( world );
+
+    // 9. Composição para Wallpaper (Regra dos Terços)
+    // Desloca a lua um pouco para a esquerda, ideal para quem deixa ícones à direita ou simplesmente prefere arte descentralizada
+    moon.position.set(-0.8, 0, 0); 
+    controls.target.set(-0.8, 0, 0);
+
+    // Rotação inicial bonita para mostrar as crateras do polo
+    moon.rotation.x = 3.1415 * 0.02;
+    moon.rotation.y = 3.1415 * 1.54;
+
+    // 10. Loop de Animação
+    function animate() {
+      requestAnimationFrame( animate );
+      
+      controls.update(); // Obrigatório quando enableDamping está ativo
+      
+      // Rotação muito suave, excelente para não dar tontura se for um Live Wallpaper
+      moon.rotation.y += 0.0003; 
+      world.rotation.y += 0.0001;
+      
+      renderer.render( scene, camera );
+    }
+    
+    animate();
+
+    // 11. Ajuste Automático de Tela Inteira
+    function onResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+    window.addEventListener('resize', onResize, false);
+  </script>
 </body>
 </html>
